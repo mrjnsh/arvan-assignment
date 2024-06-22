@@ -9,4 +9,3 @@ defineProps<{
     <h1 class="bg-secondary">{{ msg }}</h1>
   </div>
 </template>
-
