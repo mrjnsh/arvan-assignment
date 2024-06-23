@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="question" v-if="questionText">
+    <p class="Text-Style" v-if="questionText">
       {{ questionText }}
       <a :href="questionLink" class="link">{{ questionLinkText }}</a>
     </p>
@@ -29,10 +29,6 @@ export default defineComponent({
 </script>
 
 <style>
-.question {
-  color: var(--dark-color);
-  font-size: 16px;
-}
 .link {
   color: var(--dark-color);
   font-weight: bold;
