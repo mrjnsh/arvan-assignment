@@ -50,6 +50,8 @@ import { RunValidation } from '@/hooks/joiValidator'
 import { useForm } from '@/hooks/useForm'
 import { useMutation } from '@/hooks/useMutation'
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/modules/useAuth'
 
 export default defineComponent({
   name: 'LoginForm',
@@ -57,7 +59,7 @@ export default defineComponent({
     InputField,
     SubmitButton,
     AuthFormWrapper,
-    AuthViewsLink,
+    AuthViewsLink
   },
   setup() {
     const { values, errors, handleChange } = useForm<LoginPayload['user']>(
@@ -67,8 +69,9 @@ export default defineComponent({
       },
       (value) => RunValidation(VALIDATION, value)
     )
-
-    const { mutate } = useMutation<User, LoginPayload>({
+    const { setUser } = useAuth()
+    const router = useRouter()
+    const { mutate, data, error } = useMutation<User, LoginPayload>({
       url: LOGIN_URL,
       method: 'POST'
     })
@@ -79,9 +82,12 @@ export default defineComponent({
           user: {
             ...values.value
           }
-          
         })
-        console.log(errors.value.password,"ojmsl;");
+        if (data.value === null || error.value !== null) {
+          return
+        }
+        setUser(data.value, true)
+        router.push({ name: 'dashboard' })
       } catch (err) {
         console.error('Login failed:', err)
       }

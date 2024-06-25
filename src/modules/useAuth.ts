@@ -1,9 +1,7 @@
-import { CURRENT_USER_URL } from './../config'
+import { AUTH_KEY, CURRENT_USER_URL } from '@/config'
 import { reactive, toRefs, watch } from 'vue'
 import type { User } from '@/domain/User'
 import { useQuery } from '@/hooks/useQuery'
-
-const AUTH_KEY = 'blog_token'
 
 interface AuthState {
   authenticating: boolean
@@ -45,7 +43,7 @@ if (token) {
 export const useAuth = () => {
   const setUser = (payload: User, remember: boolean): void => {
     if (remember) {
-      window.localStorage.setItem(AUTH_KEY, payload.token)
+      window.localStorage.setItem(AUTH_KEY, payload.user.token)
     }
 
     state.user = payload

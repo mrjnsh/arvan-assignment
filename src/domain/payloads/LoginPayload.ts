@@ -8,6 +8,6 @@ export interface LoginPayload {
 }
 
 export const VALIDATION = Joi.object({
-  email: Joi.string().required().email({tlds:false}),
+  email: Joi.string().required().email({ tlds: false }),
   password: Joi.string().required().min(8)
 })
