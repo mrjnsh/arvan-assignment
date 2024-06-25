@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="btn btn-outline-info">Logout</button>
+  <button type="button" class="btn btn-outline-info py-1">Logout</button>
 </template>
 
 <style scoped>
