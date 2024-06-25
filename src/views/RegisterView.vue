@@ -1,15 +1,23 @@
 <template>
   <AuthFormWrapper>
     <div class="text-center">
-      <h1 class="Text-Style-4 title">LOGIN</h1>
+      <h1 class="Text-Style-4 title">Register</h1>
     </div>
     <form
       ref="form"
       id="auth-form"
       @submit.prevent="handleSubmit"
       novalidate
-      class="needs-validation d-grid gap-4"
+      class="needs-validation d-grid gap-3"
     >
+      <InputField
+        v-model="values.username"
+        @input="handleChange"
+        typeOfInput="text"
+        label="Username"
+        :errorText="errors.username ? errors.username[0] : ''"
+        inputId="username"
+      />
       <InputField
         v-model="values.email"
         @input="handleChange"
@@ -26,12 +34,12 @@
         :errorText="errors.password ? errors.password[0] : ''"
         inputId="password"
       />
-      <div>
-        <SubmitButton button-text="Login" class="my-3" />
+      <div class="mt-4">
+        <SubmitButton button-text="Register" />
         <AuthViewsLink
-          questionText="Don’t have an account?"
-          questionLink="/register"
-          questionLinkText="Register Now"
+          questionText="Already have an account?"
+          questionLink="/login"
+          questionLinkText="Login Now"
         />
       </div>
     </form>
@@ -43,18 +51,18 @@ import SubmitButton from '@/components/Form/Button/SubmitButton.vue'
 import AuthFormWrapper from '@/components/Form/Frame/AuthFormWrapper.vue'
 import InputField from '@/components/Form/Input/InputField.vue'
 import AuthViewsLink from '@/components/Form/Link/AuthViewsLink.vue'
-import { LOGIN_URL } from '@/config'
 import type { User } from '@/domain/User'
-import { LOGIN_VALIDATION, type LoginPayload } from '@/domain/payloads/LoginPayload'
 import { RunValidation } from '@/hooks/joiValidator'
 import { useForm } from '@/hooks/useForm'
 import { useMutation } from '@/hooks/useMutation'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/modules/useAuth'
+import { REGISTER_VALIDATION, type RegisterPayload } from '@/domain/payloads/RegisterPayload'
+import { REGISTER_URL } from '@/config'
 
 export default defineComponent({
-  name: 'LoginForm',
+  name: 'RegisterForm',
   components: {
     InputField,
     SubmitButton,
@@ -62,42 +70,43 @@ export default defineComponent({
     AuthViewsLink
   },
   setup() {
-    const { values, errors, handleChange } = useForm<LoginPayload['user']>(
+    const { values, errors, handleChange } = useForm<RegisterPayload['user']>(
       {
+        username:'',
         email: '',
         password: ''
       },
-      (value) => RunValidation(LOGIN_VALIDATION, value)
+      (value) => RunValidation(REGISTER_VALIDATION, value)
     )
     const { setUser } = useAuth()
     const router = useRouter()
-    const { mutate, data, error } = useMutation<User, LoginPayload>({
-      url: LOGIN_URL,
+    const { mutate, data, error, loading} = useMutation<User, RegisterPayload>({
+      url: REGISTER_URL,
       method: 'POST'
     })
 
     const handleSubmit = async () => {
-      try {
-        await mutate({
-          user: {
-            ...values.value
-          }
-        })
-        if (data.value === null || error.value !== null) {
+        try {
+          await mutate({
+            user: {
+             ...values.value
+            }
+          })
+          if (data.value === null || error.value !== null) {
           return
         }
         setUser(data.value, true)
         router.push({ name: 'dashboard' })
-      } catch (err) {
-        console.error('Login failed:', err)
+        } catch (err) {
+          console.error('Registration failed:', err)
+        }
       }
-    }
-
-    return {
+      return {
       handleSubmit,
       values,
       handleChange,
-      errors
+      errors,
+      loading
     }
   }
 })
