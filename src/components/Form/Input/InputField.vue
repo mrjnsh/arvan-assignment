@@ -5,6 +5,7 @@
     }}</label>
     <input
       ref="inputRef"
+      :name="inputId"
       :type="typeOfInput"
       class="form-control"
       :id="inputId"
@@ -14,7 +15,7 @@
       @input="handleInput"
       :class="{ 'is-invalid': isInvalid }"
     />
-    <div class="invalid-feedback">{{ errorText }}</div>
+    <div class="invalid-feedback my-2">{{ errorText }}</div>
   </div>
 </template>
 
@@ -47,7 +48,7 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: true
-    }
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
