@@ -69,6 +69,7 @@ export default defineComponent({
       },
       (value) => RunValidation(LOGIN_VALIDATION, value)
     )
+
     const { setUser } = useAuth()
     const router = useRouter()
     const { mutate, data, error } = useMutation<User, LoginPayload>({

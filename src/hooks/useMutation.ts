@@ -12,7 +12,7 @@ export function useMutation<T, P>({ url, method, headers, includeAuth }: FetchOp
   async function mutate(body: P) {
     loading.value = true
     error.value = null
-    if (!user?.value?.user.token) {
+    if (includeAuth && !user?.value?.user.token) {
       throw new Error('User is not Logged in.')
     }
     try {
@@ -24,7 +24,7 @@ export function useMutation<T, P>({ url, method, headers, includeAuth }: FetchOp
         headers: {
           ...DEFAULT_HEADERS,
           ...headers,
-          ...(includeAuth ? { Authorization: `Token ${user.value.user.token}` } : {})
+          ...(includeAuth ? { Authorization: `Token ${user!.value!.user.token}` } : {})
         },
         body: JSON.stringify(body)
       })

@@ -34,8 +34,7 @@ export default defineComponent({
       required: true
     },
     errorText: {
-      type: String,
-      required: true
+      type: String
     },
     inputId: {
       type: String,
@@ -47,7 +46,7 @@ export default defineComponent({
     },
     required: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   emits: ['update:modelValue'],
