@@ -72,7 +72,7 @@ export default defineComponent({
   setup() {
     const { values, errors, handleChange } = useForm<RegisterPayload['user']>(
       {
-        username:'',
+        username: '',
         email: '',
         password: ''
       },
@@ -80,28 +80,28 @@ export default defineComponent({
     )
     const { setUser } = useAuth()
     const router = useRouter()
-    const { mutate, data, error, loading} = useMutation<User, RegisterPayload>({
+    const { mutate, data, error, loading } = useMutation<User, RegisterPayload>({
       url: REGISTER_URL,
       method: 'POST'
     })
 
     const handleSubmit = async () => {
-        try {
-          await mutate({
-            user: {
-             ...values.value
-            }
-          })
-          if (data.value === null || error.value !== null) {
+      try {
+        await mutate({
+          user: {
+            ...values.value
+          }
+        })
+        if (data.value === null || error.value !== null) {
           return
         }
         setUser(data.value, true)
         router.push({ name: 'dashboard' })
-        } catch (err) {
-          console.error('Registration failed:', err)
-        }
+      } catch (err) {
+        console.error('Registration failed:', err)
       }
-      return {
+    }
+    return {
       handleSubmit,
       values,
       handleChange,
