@@ -17,7 +17,7 @@ export function useQuery<T, P extends Record<string, string>>({
   async function fetchData(params?: P) {
     loading.value = true
     error.value = null
-    if (!user?.value?.user.token) {
+    if (includeAuth && !user?.value?.user.token) {
       throw new Error('User is not Logged in.')
     }
     try {
@@ -27,7 +27,7 @@ export function useQuery<T, P extends Record<string, string>>({
         headers: {
           ...DEFAULT_HEADERS,
           ...headers,
-          ...(includeAuth ? { Authorization: `Token ${user.value.user.token}` } : {})
+          ...(includeAuth ? { Authorization: `Token ${user!.value!.user.token}` } : {})
         }
       })
 

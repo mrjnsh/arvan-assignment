@@ -40,7 +40,7 @@ if (token) {
   })
 }
 
-export const useAuth = () => {
+export function useAuth() {
   const setUser = (payload: User, remember: boolean): void => {
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload.user.token)

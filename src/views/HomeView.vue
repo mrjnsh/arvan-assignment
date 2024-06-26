@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TagsList from '@/components/dashboard/tags/TagsList.vue'
+</script>
 
 <template>
-  <main>home</main>
+  <main><TagsList /></main>
 </template>
