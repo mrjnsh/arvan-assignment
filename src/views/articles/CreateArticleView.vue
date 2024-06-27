@@ -107,7 +107,7 @@ export default defineComponent({
         if (data.value === null || error.value !== null) {
           return
         }
-        router.push({ name: 'dashboard' })
+        router.push({ name: 'articles' })
         tags.value = { tags: [] }
       } catch (error) {
         console.error('Error creating article:', error)

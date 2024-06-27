@@ -9,7 +9,7 @@
     />
   </div>
   <div class="d-flex">
-    <ul class="list-group border w-100">
+    <ul class="list-group border w-100 scrollable-list">
       <li v-for="(tag, index) in userTags" :key="index" class="list-group-item">
         <input
           class="form-check-input me-1"
@@ -99,5 +99,9 @@ export default defineComponent({
 <style scoped>
 .list-group-item {
   border: none;
+}
+.scrollable-list {
+  max-height: 200px;
+  overflow-y: auto; 
 }
 </style>

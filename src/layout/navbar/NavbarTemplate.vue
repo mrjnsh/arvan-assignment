@@ -19,7 +19,9 @@
     </button>
     <div class="navbar-nav d-none d-md-block">
       <div class="nav-item text-nowrap">
-        <button type="button" class="btn btn-outline-info">Logout</button>
+        <router-link class="nav-link" aria-current="page" to="/login">
+          <button type="button" class="btn btn-outline-info">Logout</button>
+        </router-link>
       </div>
     </div>
   </header>

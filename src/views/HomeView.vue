@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TagsList from '@/components/dashboard/tags/TagsList.vue'
+import ArticlesView from './articles/ArticlesView.vue';
 </script>
 
 <template>
-  <main><TagsList /></main>
+  <main><ArticlesView /></main>
 </template>
