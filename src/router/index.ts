@@ -5,6 +5,7 @@ import { useAuth } from '@/modules/useAuth'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardWrapper from '@/layout/wrapper/DashboardWrapper.vue'
 import CreateArticleView from '@/views/articles/CreateArticleView.vue'
+import ArticlesView from '@/views/articles/ArticlesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,17 @@ const router = createRouter({
         {
           path: 'articles/create',
           component: CreateArticleView
+        },
+        {
+          path: 'articles',
+          name: 'articles',
+          component: ArticlesView,
+        },
+        {
+          path: 'articles/page/:page',
+          name: 'articles-page',
+          component: ArticlesView,
+          props: true
         }
       ]
     }
