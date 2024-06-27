@@ -15,14 +15,14 @@
       <tbody>
         <tr v-for="(article, index) in paginatedArticles" :key="article.slug" class="text-center">
           <th scope="row">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
-          <td>{{ article.title || '-'  }}</td>
+          <td>{{ article.title || '-' }}</td>
           <td>{{ article.author.username || '-' }}</td>
           <td class="tags">{{ article.tagList?.join(',') || '-' }}</td>
-          <td>{{ article.favorited || '-'}}</td>
+          <td>{{ article.favorited || '-' }}</td>
           <td>{{ new Date(article.createdAt).toLocaleDateString() || '-' }}</td>
           <div class="d-flex justify-content-between">
             <td></td>
-              <DropdownTemplate />
+            <DeleteArticle :slug="article.slug" @article-deleted="deleteArticle" />
           </div>
         </tr>
       </tbody>
@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import DropdownTemplate from '@/components/dashboard/List/DropdownTemplate.vue';
+import { defineComponent, type PropType } from 'vue'
+import DeleteArticle from './DeleteArticle.vue'
 
 export default defineComponent({
   name: 'ArticlesList',
   components: {
-    DropdownTemplate
+    DeleteArticle
   },
   props: {
     paginatedArticles: {
@@ -52,8 +52,18 @@ export default defineComponent({
       type: Number,
       required: true
     }
+  },
+  emits: ['delete-article'],
+  setup(props, { emit }) {
+    const deleteArticle = (slug: string) => {
+      emit('delete-article', slug)
+    }
+
+    return {
+      deleteArticle
+    }
   }
-});
+})
 </script>
 
 <style scoped>
@@ -66,5 +76,4 @@ td {
 .custom-header th {
   color: var(--dark-gray-color);
 }
-
 </style>

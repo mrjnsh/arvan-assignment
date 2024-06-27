@@ -5,6 +5,7 @@
       :paginatedArticles="paginatedArticles"
       :currentPage="currentPage"
       :itemsPerPage="itemsPerPage"
+      @delete-article="deleteArticle"
     />
     <div class="d-flex justify-content-center">
       <PaginationTemplate
@@ -17,14 +18,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useQuery } from '@/hooks/useQuery';
-import { ARTICLES_LIST_URL } from '@/config';
-import type { ListArticle } from '@/domain/payloads/articles/ListsArticle';
-import ArticlesList from '@/components/dashboard/List/ArticlesList.vue';
-import PaginationTemplate from '@/components/dashboard/pagination/PaginationTemplate.vue';
-import ListTitle from '@/components/dashboard/hearder/ListTitle.vue';
+import { defineComponent, ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useQuery } from '@/hooks/useQuery'
+import { ARTICLES_LIST_URL } from '@/config'
+import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
+import ArticlesList from '@/components/dashboard/List/ArticlesList.vue'
+import PaginationTemplate from '@/components/dashboard/pagination/PaginationTemplate.vue'
+import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
 
 export default defineComponent({
   name: 'ArticlesView',
@@ -38,37 +39,47 @@ export default defineComponent({
       url: ARTICLES_LIST_URL,
       method: 'GET',
       includeAuth: true
-    });
+    })
 
-    const route = useRoute();
-    const router = useRouter();
-    const currentPage = ref(Number(route.params.page) || 1);
-    const itemsPerPage = ref(7);
+    const route = useRoute()
+    const router = useRouter()
+    const currentPage = ref(Number(route.params.page) || 1)
+    const itemsPerPage = ref(7)
 
     const totalPages = computed(() => {
-      return data.value ? Math.ceil(data.value.articles.length / itemsPerPage.value) : 0;
-    });
+      return data.value ? Math.ceil(data.value.articles.length / itemsPerPage.value) : 0
+    })
 
     const paginatedArticles = computed(() => {
-      if (!data.value) return [];
-      const start = (currentPage.value - 1) * itemsPerPage.value;
-      const end = start + itemsPerPage.value;
-      return data.value.articles.slice(start, end);
-    });
+      if (!data.value) return []
+      const start = (currentPage.value - 1) * itemsPerPage.value
+      const end = start + itemsPerPage.value
+      return data.value.articles.slice(start, end)
+    })
 
     const goToPage = (page: number) => {
       if (page > 0 && page <= totalPages.value) {
-        router.push({ name: 'articles-page', params: { page } });
+        router.push({ name: 'articles-page', params: { page } })
       }
-    };
+    }
 
-    watch(() => route.params.page, (newPage) => {
-      currentPage.value = Number(newPage) || 1;
-    });
+    watch(
+      () => route.params.page,
+      (newPage) => {
+        currentPage.value = Number(newPage) || 1
+      }
+    )
+
+    const deleteArticle = (slug: string) => {
+      if (data.value) {
+        data.value.articles = data.value.articles.filter((article) => article.slug !== slug)
+      }
+      fetchData()
+    }
 
     onMounted(async () => {
-      await fetchData();
-    });
+      await fetchData()
+    })
 
     return {
       articles: data,
@@ -76,10 +87,11 @@ export default defineComponent({
       itemsPerPage,
       totalPages,
       paginatedArticles,
-      goToPage
-    };
+      goToPage,
+      deleteArticle
+    }
   }
-});
+})
 </script>
 
 <style scoped>
