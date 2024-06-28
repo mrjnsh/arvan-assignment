@@ -31,7 +31,7 @@ export function useQuery<T, P extends Record<string, string>>({
         }
       })
 
-      data.value = await response.json()
+      data.value = response.status === 204 ? null : await response.json()
     } catch (err) {
       error.value = err as Error
     } finally {
@@ -46,7 +46,23 @@ async function callAPI(url: string, requestInit: RequestInit) {
   const response = await fetch(url, requestInit)
 
   if (!response.ok) {
-    throw new Error('Network response was not ok')
+    let errorMessage = 'Network response was not ok'
+    try{
+      errorMessage =errorToString(await response.json())
+    }catch{ /* empty */ }
+    throw new Error(errorMessage)
   }
   return response
+}
+
+function errorToString(error: Record<string, unknown>) : string{
+  if('errors' in error){
+return Object.entries(error?.errors??{})
+  .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+  .join(', ');
+  }
+  if('message' in error){
+      return error.message as string;
+  }
+  return 'Unknown error occurred.';
 }

@@ -62,6 +62,7 @@ import { RunValidation } from '@/hooks/joiValidator'
 import { useRouter } from 'vue-router'
 import TagsList from '@/components/dashboard/tags/TagsList.vue'
 import type { TagsPayload } from '@/domain/payloads/articles/TagsPayload'
+import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'NewArticleForm',
@@ -105,7 +106,9 @@ export default defineComponent({
             tagList: tags.value.tags
           }
         })
+        toast.success('Article added successfully')
         if (data.value === null || error.value !== null) {
+          toast.error(error.value.message)
           return
         }
         router.push({ name: 'articles' })

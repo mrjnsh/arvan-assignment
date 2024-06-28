@@ -35,7 +35,7 @@
         inputId="password"
       />
       <div class="mt-4">
-        <SubmitButton button-text="Register" />
+        <SubmitButton button-text="Register" :disabled="loading" />
         <AuthViewsLink
           questionText="Already have an account?"
           questionLink="/login"
@@ -60,6 +60,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/modules/useAuth'
 import { REGISTER_VALIDATION, type RegisterPayload } from '@/domain/payloads/RegisterPayload'
 import { REGISTER_URL } from '@/config'
+import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'RegisterForm',
@@ -93,8 +94,10 @@ export default defineComponent({
           }
         })
         if (data.value === null || error.value !== null) {
+          toast.error(error.value.message)
           return
         }
+        toast.success('welcome')
         setUser(data.value, true)
         router.push({ name: 'dashboard' })
       } catch (err) {

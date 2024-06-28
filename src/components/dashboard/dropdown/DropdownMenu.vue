@@ -12,7 +12,7 @@
       </button>
 
       <ul class="dropdown-menu">
-        <li><button class="dropdown-item">Edit</button></li>
+        <li><button class="dropdown-item" @click="editArticle">Edit</button></li>
         <li>
           <button
             class="dropdown-item"
@@ -60,6 +60,7 @@ import type { Article } from '@/domain/Article'
 import { useMutation } from '@/hooks/useMutation'
 import { makeHtmlIdCompatible } from '@/utility/stringUtils'
 import { defineComponent } from 'vue'
+import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'DropdownMenu',
@@ -71,7 +72,7 @@ export default defineComponent({
   },
   emits: ['article-deleted', 'article-edited'],
   setup(props, { emit }) {
-    const { mutate, loading } = useMutation<Article, {}>({
+    const { mutate, loading, error } = useMutation<Article, {}>({
       url: `${ARTICLES_URL}/${props.slug}`,
       method: 'DELETE',
       includeAuth: true
@@ -80,6 +81,11 @@ export default defineComponent({
     const deleteArticle = async () => {
       try {
         await mutate({})
+        if (error.value) {
+          toast.error(error.value.message)
+        } else {
+          toast.success('Article deleted successfully')
+        }
         emit('article-deleted', props.slug)
       } catch (error) {
         console.error('Failed to delete the article:', error)

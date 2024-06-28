@@ -60,6 +60,7 @@ import { useForm } from '@/hooks/useForm'
 import { useMutation } from '@/hooks/useMutation'
 import { defineComponent, ref, type PropType } from 'vue'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'EditArticleForm',
@@ -110,7 +111,10 @@ export default defineComponent({
           }
         })
         if (data.value === null || error.value !== null) {
+          toast.error(error.value.message)
           return
+        } else {
+          toast.success('Article updated successfully')
         }
         router.push({ name: 'articles' })
         tags.value = { tags: [] }
