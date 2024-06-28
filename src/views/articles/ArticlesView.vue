@@ -26,7 +26,6 @@ import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
 import ArticlesList from '@/components/dashboard/List/ArticlesList.vue'
 import PaginationTemplate from '@/components/dashboard/pagination/PaginationTemplate.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
-import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'ArticlesView',
@@ -36,7 +35,7 @@ export default defineComponent({
     PaginationTemplate
   },
   setup() {
-    const { data, fetchData,error } = useQuery<ListArticle, {}>({
+    const { data, fetchData, error } = useQuery<ListArticle, {}>({
       url: ARTICLES_URL,
       method: 'GET',
       includeAuth: true

@@ -6,7 +6,7 @@ import router from './router'
 import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
-import 'vue3-toastify/dist/index.css';
+import 'vue3-toastify/dist/index.css'
 
 const app = createApp(App)
 

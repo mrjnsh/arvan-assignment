@@ -73,7 +73,7 @@ export default defineComponent({
 
     const { setUser } = useAuth()
     const router = useRouter()
-    const { mutate, data, error,loading } = useMutation<User, LoginPayload>({
+    const { mutate, data, error, loading } = useMutation<User, LoginPayload>({
       url: LOGIN_URL,
       method: 'POST'
     })
@@ -84,15 +84,14 @@ export default defineComponent({
           user: {
             ...values.value
           }
-        },
-      )
-      if (data.value === null || error.value !== null) {
-        toast.error(error.value.message)
-        return
-      }
-      toast.success("welcome")
-      setUser(data.value, true)
-      router.push({ name: 'dashboard' })
+        })
+        if (data.value === null || error.value !== null) {
+          toast.error(error.value.message)
+          return
+        }
+        toast.success('welcome')
+        setUser(data.value, true)
+        router.push({ name: 'dashboard' })
       } catch (err) {
         toast.error('Login failed:', err)
       }
