@@ -47,22 +47,24 @@ async function callAPI(url: string, requestInit: RequestInit) {
 
   if (!response.ok) {
     let errorMessage = 'Network response was not ok'
-    try{
-      errorMessage =errorToString(await response.json())
-    }catch{ /* empty */ }
+    try {
+      errorMessage = errorToString(await response.json())
+    } catch {
+      /* empty */
+    }
     throw new Error(errorMessage)
   }
   return response
 }
 
-function errorToString(error: Record<string, unknown>) : string{
-  if('errors' in error){
-return Object.entries(error?.errors??{})
-  .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
-  .join(', ');
+function errorToString(error: Record<string, unknown>): string {
+  if ('errors' in error) {
+    return Object.entries(error?.errors ?? {})
+      .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+      .join(', ')
   }
-  if('message' in error){
-      return error.message as string;
+  if ('message' in error) {
+    return error.message as string
   }
-  return 'Unknown error occurred.';
+  return 'Unknown error occurred.'
 }
