@@ -25,31 +25,7 @@
       </ul>
     </div>
     <div :id="'confirm-' + makeHtmlIdCompatible(slug)" class="modal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Confirm Deletion</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">Are you sure you want to delete this item?</div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-              @click="deleteArticle"
-            >
-              Yes
-            </button>
-          </div>
-        </div>
-      </div>
+      <ModalTemplate :handleDelete="editArticle" />
     </div>
   </div>
 </template>
@@ -61,9 +37,13 @@ import { useMutation } from '@/hooks/useMutation'
 import { makeHtmlIdCompatible } from '@/utility/stringUtils'
 import { defineComponent } from 'vue'
 import { toast } from 'vue3-toastify'
+import ModalTemplate from '../modal/modalTemplate.vue'
 
 export default defineComponent({
   name: 'DropdownMenu',
+  components: {
+    ModalTemplate
+  },
   props: {
     slug: {
       type: String,
