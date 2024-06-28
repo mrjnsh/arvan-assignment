@@ -27,7 +27,7 @@
         inputId="password"
       />
       <div>
-        <SubmitButton button-text="Login" class="my-3" />
+        <SubmitButton button-text="Login" class="my-3" :disabled="loading" />
         <AuthViewsLink
           questionText="Don’t have an account?"
           questionLink="/register"
@@ -52,6 +52,7 @@ import { useMutation } from '@/hooks/useMutation'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/modules/useAuth'
+import { toast } from 'vue3-toastify'
 
 export default defineComponent({
   name: 'LoginForm',
@@ -72,7 +73,7 @@ export default defineComponent({
 
     const { setUser } = useAuth()
     const router = useRouter()
-    const { mutate, data, error } = useMutation<User, LoginPayload>({
+    const { mutate, data, error,loading } = useMutation<User, LoginPayload>({
       url: LOGIN_URL,
       method: 'POST'
     })
@@ -83,14 +84,17 @@ export default defineComponent({
           user: {
             ...values.value
           }
-        })
-        if (data.value === null || error.value !== null) {
-          return
-        }
-        setUser(data.value, true)
-        router.push({ name: 'dashboard' })
+        },
+      )
+      if (data.value === null || error.value !== null) {
+        toast.error(error.value.message)
+        return
+      }
+      toast.success("welcome")
+      setUser(data.value, true)
+      router.push({ name: 'dashboard' })
       } catch (err) {
-        console.error('Login failed:', err)
+        toast.error('Login failed:', err)
       }
     }
 
@@ -98,7 +102,8 @@ export default defineComponent({
       handleSubmit,
       values,
       handleChange,
-      errors
+      errors,
+      loading
     }
   }
 })

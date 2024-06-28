@@ -4,17 +4,16 @@
       label
     }}</label>
     <input
-      ref="inputRef"
-      :name="inputId"
-      :type="typeOfInput"
-      class="form-control"
-      :id="inputId"
-      :value="modelValue"
-      :required="required"
-      @blur="checkValidity"
-      @input="handleInput"
-      :class="{ 'is-invalid': isInvalid }"
-    />
+    ref="inputRef"
+    :name="inputId"
+    :type="typeOfInput"
+    class="form-control"
+    :id="inputId"
+    :value="modelValue"
+    :required="required"
+    @input="handleInput"
+    :class="{ 'is-invalid': isInvalid }"
+  />
     <div class="invalid-feedback my-2">{{ errorText }}</div>
   </div>
 </template>
@@ -59,19 +58,14 @@ export default defineComponent({
       emit('update:modelValue', target.value)
     }
 
-    const checkValidity = () => {
-      if (inputRef.value) {
-        isInvalid.value = !inputRef.value.checkValidity()
-      }
-    }
-
-    watch(() => props.modelValue, checkValidity)
+    watch(() => props.errorText, (value) => {
+      isInvalid.value = !!value
+    })
 
     return {
       inputRef,
       isInvalid,
       handleInput,
-      checkValidity
     }
   }
 })
