@@ -15,14 +15,18 @@
       <tbody>
         <tr v-for="(article, index) in paginatedArticles" :key="article.slug" class="text-center">
           <th scope="row">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
-          <td>{{ article.title || '-'  }}</td>
+          <td>{{ article.title || '-' }}</td>
           <td>{{ article.author.username || '-' }}</td>
           <td class="tags">{{ article.tagList?.join(',') || '-' }}</td>
-          <td>{{ article.favorited || '-'}}</td>
+          <td>{{ article.favorited || '-' }}</td>
           <td>{{ new Date(article.createdAt).toLocaleDateString() || '-' }}</td>
           <div class="d-flex justify-content-between">
             <td></td>
-              <DropdownTemplate />
+            <DropdownMenu
+              :slug="article.slug"
+              @article-deleted="deleteArticle"
+              @article-edited="editArticle"
+            />
           </div>
         </tr>
       </tbody>
@@ -31,13 +35,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import DropdownTemplate from '@/components/dashboard/List/DropdownTemplate.vue';
+import { defineComponent, type PropType } from 'vue'
+import DropdownMenu from '../dropdown/DropdownMenu.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'ArticlesList',
   components: {
-    DropdownTemplate
+    DropdownMenu
   },
   props: {
     paginatedArticles: {
@@ -52,8 +57,22 @@ export default defineComponent({
       type: Number,
       required: true
     }
+  },
+  emits: ['article-deleted'],
+  setup(props, { emit }) {
+    const router = useRouter()
+    const deleteArticle = (slug: string) => {
+      emit('article-deleted', slug)
+    }
+    const editArticle = (slug: string) => {
+      router.push({ name: 'article-edited', params: { slug } })
+    }
+    return {
+      deleteArticle,
+      editArticle
+    }
   }
-});
+})
 </script>
 
 <style scoped>
@@ -66,5 +85,4 @@ td {
 .custom-header th {
   color: var(--dark-gray-color);
 }
-
 </style>
