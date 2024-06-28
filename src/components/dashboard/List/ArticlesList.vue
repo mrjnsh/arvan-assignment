@@ -22,7 +22,11 @@
           <td>{{ new Date(article.createdAt).toLocaleDateString() || '-' }}</td>
           <div class="d-flex justify-content-between">
             <td></td>
-            <DeleteArticle :slug="article.slug" @article-deleted="deleteArticle" />
+            <DropdownMenu
+              :slug="article.slug"
+              @article-deleted="deleteArticle"
+              @article-edited="editArticle"
+            />
           </div>
         </tr>
       </tbody>
@@ -32,12 +36,13 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
-import DeleteArticle from './DeleteArticle.vue'
+import DropdownMenu from '../dropdown/DropdownMenu.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'ArticlesList',
   components: {
-    DeleteArticle
+    DropdownMenu
   },
   props: {
     paginatedArticles: {
@@ -53,14 +58,18 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['delete-article'],
+  emits: ['article-deleted'],
   setup(props, { emit }) {
+    const router = useRouter()
     const deleteArticle = (slug: string) => {
-      emit('delete-article', slug)
+      emit('article-deleted', slug)
     }
-
+    const editArticle = (slug: string) => {
+      router.push({ name: 'article-edited', params: { slug } })
+    }
     return {
-      deleteArticle
+      deleteArticle,
+      editArticle
     }
   }
 })

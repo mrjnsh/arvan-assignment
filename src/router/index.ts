@@ -5,6 +5,7 @@ import { useAuth } from '@/modules/useAuth'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardWrapper from '@/layout/wrapper/DashboardWrapper.vue'
 import CreateArticleView from '@/views/articles/CreateArticleView.vue'
+import EditArticleView from '@/views/articles/EditArticleView.vue'
 import ArticlesView from '@/views/articles/ArticlesView.vue'
 
 const router = createRouter({
@@ -36,9 +37,14 @@ const router = createRouter({
           component: CreateArticleView
         },
         {
+          path: 'articles/edit/:slug',
+          name: 'article-edited',
+          component: EditArticleView
+        },
+        {
           path: 'articles',
           name: 'articles',
-          component: ArticlesView,
+          component: ArticlesView
         },
         {
           path: 'articles/page/:page',

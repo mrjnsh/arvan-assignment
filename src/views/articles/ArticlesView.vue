@@ -5,7 +5,7 @@
       :paginatedArticles="paginatedArticles"
       :currentPage="currentPage"
       :itemsPerPage="itemsPerPage"
-      @delete-article="deleteArticle"
+      @article-deleted="deleteArticle"
     />
     <div class="d-flex justify-content-center">
       <PaginationTemplate
@@ -21,7 +21,7 @@
 import { defineComponent, ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@/hooks/useQuery'
-import { ARTICLES_LIST_URL } from '@/config'
+import { ARTICLES_URL } from '@/config'
 import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
 import ArticlesList from '@/components/dashboard/List/ArticlesList.vue'
 import PaginationTemplate from '@/components/dashboard/pagination/PaginationTemplate.vue'
@@ -36,7 +36,7 @@ export default defineComponent({
   },
   setup() {
     const { data, fetchData } = useQuery<ListArticle, {}>({
-      url: ARTICLES_LIST_URL,
+      url: ARTICLES_URL,
       method: 'GET',
       includeAuth: true
     })
@@ -70,10 +70,7 @@ export default defineComponent({
       }
     )
 
-    const deleteArticle = (slug: string) => {
-      if (data.value) {
-        data.value.articles = data.value.articles.filter((article) => article.slug !== slug)
-      }
+    const deleteArticle = () => {
       fetchData()
     }
 

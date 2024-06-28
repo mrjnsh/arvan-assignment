@@ -1,6 +1,8 @@
 import Joi from 'joi'
-export interface CreateArticlePayload {
+
+export interface EditArticlePayload {
   article: {
+    slug: string
     title: string
     description: string
     body: string

@@ -21,3 +21,7 @@ export interface Article {
   favoritesCount: number
   author: Author
 }
+
+export interface ArticleItem {
+  article: Omit<Article, 'tagList'> & { tagList: string[] }
+}

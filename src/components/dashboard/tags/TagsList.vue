@@ -10,7 +10,7 @@
   </div>
   <div class="d-flex">
     <ul class="list-group border w-100 scrollable-list">
-      <li v-for="(tag, index) in userTags" :key="index" class="list-group-item">
+      <li v-for="(tag, index) in combinedTags" :key="index" class="list-group-item">
         <input
           class="form-check-input me-1"
           type="checkbox"
@@ -29,7 +29,7 @@ import InputField from '@/components/Form/Input/InputField.vue'
 import { TAGS_LIST_URL } from '@/config'
 import type { Tags } from '@/domain/Article'
 import { useQuery } from '@/hooks/useQuery'
-import { defineComponent, onMounted, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 
 export default defineComponent({
   name: 'TagsList',
@@ -45,21 +45,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const newTag = ref('')
     const userTags = ref<string[]>([])
-    const { selectedTags } = toRefs(props)
-    const internalSelectedTags = ref<string[]>([])
+    const internalSelectedTags = ref<string[]>(props.selectedTags)
 
     const { data, fetchData } = useQuery<Tags, {}>({
       url: TAGS_LIST_URL,
-      method: 'GET',
-      includeAuth: true
+      method: 'GET'
     })
-    watch(
-      selectedTags,
-      (newVal) => {
-        internalSelectedTags.value = [...newVal]
-      },
-      { immediate: true }
-    )
 
     watch(internalSelectedTags, (newVal) => {
       emit('update:selectedTags', newVal)
@@ -68,7 +59,7 @@ export default defineComponent({
       fetchData()
         .then(() => {
           if (data.value) {
-            userTags.value = data.value.tags
+            userTags.value.push(...data.value.tags)
           }
         })
         .catch((err) => {
@@ -80,16 +71,21 @@ export default defineComponent({
       if (tag && !userTags.value.includes(tag)) {
         userTags.value.push(tag)
         userTags.value.sort((a, b) => a.localeCompare(b))
-        internalSelectedTags.value.push(tag)
+        internalSelectedTags.value = [...internalSelectedTags.value, tag]
         newTag.value = ''
       }
     }
+    const combinedTags = computed(() => {
+      const tagsSet = new Set([...userTags.value, ...props.selectedTags])
+      return Array.from(tagsSet).sort((a, b) => a.localeCompare(b))
+    })
 
     return {
       newTag,
       userTags,
       internalSelectedTags,
       addTag,
+      combinedTags,
       data
     }
   }
@@ -102,6 +98,6 @@ export default defineComponent({
 }
 .scrollable-list {
   max-height: 200px;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 </style>
