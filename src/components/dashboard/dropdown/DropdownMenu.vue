@@ -25,7 +25,7 @@
       </ul>
     </div>
     <div :id="'confirm-' + makeHtmlIdCompatible(slug)" class="modal" tabindex="-1">
-      <ModalTemplate :handleDelete="editArticle" />
+      <DeleteModal :handleDelete="editArticle" />
     </div>
   </div>
 </template>
@@ -37,12 +37,12 @@ import { useMutation } from '@/hooks/useMutation'
 import { makeHtmlIdCompatible } from '@/utility/stringUtils'
 import { defineComponent } from 'vue'
 import { toast } from 'vue3-toastify'
-import ModalTemplate from '../modal/modalTemplate.vue'
+import DeleteModal from '../modal/DeleteModal.vue'
 
 export default defineComponent({
   name: 'DropdownMenu',
   components: {
-    ModalTemplate
+    DeleteModal
   },
   props: {
     slug: {
@@ -75,6 +75,7 @@ export default defineComponent({
     const editArticle = () => {
       emit('article-edited', props.slug)
     }
+
     return {
       deleteArticle,
       editArticle,
