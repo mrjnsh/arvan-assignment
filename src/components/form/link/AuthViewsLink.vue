@@ -2,7 +2,7 @@
   <div>
     <p class="Text-Style" v-if="questionText">
       {{ questionText }}
-      <a :href="questionLink" class="link">{{ questionLinkText }}</a>
+      <router-link :to="questionLink" class="link">{{ questionLinkText }}</router-link>
     </p>
   </div>
 </template>
