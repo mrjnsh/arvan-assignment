@@ -31,7 +31,7 @@ export default defineComponent({
     const confirmDelete = () => {
       props.handleDelete()
     }
-    return {confirmDelete}
+    return { confirmDelete }
   }
 })
 </script>
