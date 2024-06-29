@@ -8,7 +8,7 @@
       <div class="modal-body">Are you sure you want to delete this item?</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="handleDelete">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="confirmDelete">
           Yes
         </button>
       </div>
@@ -26,6 +26,12 @@ export default defineComponent({
       type: Function,
       required: true
     }
+  },
+  setup(props) {
+    const confirmDelete = () => {
+      props.handleDelete()
+    }
+    return {confirmDelete}
   }
 })
 </script>
