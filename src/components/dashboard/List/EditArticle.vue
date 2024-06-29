@@ -45,9 +45,9 @@
 </template>
 
 <script lang="ts">
-import SubmitButton from '@/components/Form/Button/SubmitButton.vue'
-import InputField from '@/components/Form/Input/InputField.vue'
-import TextareaField from '@/components/Form/Textarea/TextareaField.vue'
+import SubmitButton from '@/components/form/button/SubmitButton.vue'
+import InputField from '@/components/form/input/InputField.vue'
+import TextareaField from '@/components/form/textarea/TextareaField.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
 import TagsList from '@/components/dashboard/tags/TagsList.vue'
 import { ARTICLES_URL } from '@/config'
@@ -111,7 +111,7 @@ export default defineComponent({
           }
         })
         if (data.value === null || error.value !== null) {
-          toast.error(error.value.message)
+          toast.error(error.value!.message)
           return
         } else {
           toast.success('Article updated successfully')

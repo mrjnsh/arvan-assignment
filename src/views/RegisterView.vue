@@ -47,10 +47,10 @@
 </template>
 
 <script lang="ts">
-import SubmitButton from '@/components/Form/Button/SubmitButton.vue'
-import AuthFormWrapper from '@/components/Form/Frame/AuthFormWrapper.vue'
-import InputField from '@/components/Form/Input/InputField.vue'
-import AuthViewsLink from '@/components/Form/Link/AuthViewsLink.vue'
+import SubmitButton from '@/components/form/button/SubmitButton.vue'
+import AuthFormWrapper from '@/components/form/frame/AuthFormWrapper.vue'
+import InputField from '@/components/form/input/InputField.vue'
+import AuthViewsLink from '@/components/form/link/AuthViewsLink.vue'
 import type { User } from '@/domain/User'
 import { RunValidation } from '@/hooks/joiValidator'
 import { useForm } from '@/hooks/useForm'
@@ -94,7 +94,7 @@ export default defineComponent({
           }
         })
         if (data.value === null || error.value !== null) {
-          toast.error(error.value.message)
+          toast.error(error.value!.message)
           return
         }
         toast.success('welcome')
