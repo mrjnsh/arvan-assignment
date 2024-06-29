@@ -19,6 +19,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ```sh
 npm install
 ```
+### Set up environment variables
+You can find .env.template in the root directory. You just need to create a copy of it in same directory and provide proper variables.
+
+#### Variables
+```
+# base url for api. for example: https://api.realworld.io/api
+VITE_API_BASE_URL=
+```
 
 ### Compile and Hot-Reload for Development
 
