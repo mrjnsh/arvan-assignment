@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import LoadingTemplate from '@/components/Loading/LoadingTemplate.vue'
+import LoadingTemplate from '@/components/loading/LoadingIndicator.vue'
 import EditArticle from '@/components/dashboard/List/EditArticle.vue'
 import { ARTICLES_URL } from '@/config'
 import type { ArticleItem } from '@/domain/Article'

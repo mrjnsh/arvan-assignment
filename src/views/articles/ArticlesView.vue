@@ -24,7 +24,7 @@ import { useQuery } from '@/hooks/useQuery'
 import { ARTICLES_URL } from '@/config'
 import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
 import ArticlesList from '@/components/dashboard/List/ArticlesList.vue'
-import PaginationTemplate from '@/components/dashboard/pagination/PaginationTemplate.vue'
+import PaginationTemplate from '@/components/dashboard/pagination/ListPagination.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
 
 export default defineComponent({

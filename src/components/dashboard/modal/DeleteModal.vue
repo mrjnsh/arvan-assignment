@@ -23,7 +23,7 @@ export default defineComponent({
   name: 'DeletionModal',
   props: {
     handleDelete: {
-      type: String,
+      type: Function,
       required: true
     }
   }
