@@ -25,7 +25,7 @@
       </ul>
     </div>
     <div :id="'confirm-' + makeHtmlIdCompatible(slug)" class="modal" tabindex="-1">
-      <DeleteModal :handleDelete="editArticle" />
+      <DeleteModal :handleDelete="deleteArticle" />
     </div>
   </div>
 </template>
