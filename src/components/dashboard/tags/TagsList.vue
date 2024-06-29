@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import InputField from '@/components/Form/Input/InputField.vue'
+import InputField from '@/components/form/input/InputField.vue'
 import { TAGS_LIST_URL } from '@/config'
 import type { Tags } from '@/domain/Article'
 import { useQuery } from '@/hooks/useQuery'

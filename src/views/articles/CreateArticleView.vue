@@ -46,8 +46,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import SubmitButton from '@/components/Form/Button/SubmitButton.vue'
-import InputField from '@/components/Form/Input/InputField.vue'
+import SubmitButton from '@/components/form/button/SubmitButton.vue'
+import InputField from '@/components/form/input/InputField.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
 import { ARTICLES_URL } from '@/config'
 import { useMutation } from '@/hooks/useMutation'
@@ -56,7 +56,7 @@ import {
   ARTICLE_VALIDATION,
   type CreateArticlePayload
 } from '@/domain/payloads/articles/CreateArticlePayload'
-import TextareaField from '@/components/Form/Textarea/TextareaField.vue'
+import TextareaField from '@/components/form/textarea/TextareaField.vue'
 import { useForm } from '@/hooks/useForm'
 import { RunValidation } from '@/hooks/joiValidator'
 import { useRouter } from 'vue-router'
@@ -108,7 +108,7 @@ export default defineComponent({
         })
         toast.success('Article added successfully')
         if (data.value === null || error.value !== null) {
-          toast.error(error.value.message)
+          toast.error(error.value!.message)
           return
         }
         router.push({ name: 'articles' })

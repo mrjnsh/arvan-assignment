@@ -39,10 +39,10 @@
 </template>
 
 <script lang="ts">
-import SubmitButton from '@/components/Form/Button/SubmitButton.vue'
-import AuthFormWrapper from '@/components/Form/Frame/AuthFormWrapper.vue'
-import InputField from '@/components/Form/Input/InputField.vue'
-import AuthViewsLink from '@/components/Form/Link/AuthViewsLink.vue'
+import SubmitButton from '@/components/form/button/SubmitButton.vue'
+import AuthFormWrapper from '@/components/form/frame/AuthFormWrapper.vue'
+import InputField from '@/components/form/input/InputField.vue'
+import AuthViewsLink from '@/components/form/link/AuthViewsLink.vue'
 import { LOGIN_URL } from '@/config'
 import type { User } from '@/domain/User'
 import { LOGIN_VALIDATION, type LoginPayload } from '@/domain/payloads/LoginPayload'
@@ -86,14 +86,14 @@ export default defineComponent({
           }
         })
         if (data.value === null || error.value !== null) {
-          toast.error(error.value.message)
+          toast.error(error.value!.message)
           return
         }
         toast.success('welcome')
         setUser(data.value, true)
         router.push({ name: 'dashboard' })
       } catch (err) {
-        toast.error('Login failed:', err)
+        console.error('Login failed:', err)
       }
     }
 

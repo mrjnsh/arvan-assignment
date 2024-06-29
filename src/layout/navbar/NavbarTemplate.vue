@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import './NavigationBar.css'
+import './NavigationStyle.css'
 import { useAuth } from '@/modules/useAuth'
 import { defineComponent } from 'vue'
 
