@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuth } from '@/modules/useAuth'
 import RegisterView from '@/views/RegisterView.vue'
@@ -14,7 +13,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      redirect: '/login'
     },
     {
       path: '/login',
