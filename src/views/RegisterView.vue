@@ -1,7 +1,7 @@
 <template>
   <AuthFormWrapper>
     <div class="text-center">
-      <h1 class="Text-Style-4 title">Register</h1>
+      <h1 class="Text-Style-4">Register</h1>
     </div>
     <form
       ref="form"
@@ -46,7 +46,7 @@
   </AuthFormWrapper>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import SubmitButton from '@/components/form/button/SubmitButton.vue'
 import AuthFormWrapper from '@/components/form/frame/AuthFormWrapper.vue'
 import InputField from '@/components/form/input/InputField.vue'
@@ -55,68 +55,44 @@ import type { User } from '@/domain/User'
 import { RunValidation } from '@/hooks/joiValidator'
 import { useForm } from '@/hooks/useForm'
 import { useMutation } from '@/hooks/useMutation'
-import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/modules/useAuth'
 import { REGISTER_VALIDATION, type RegisterPayload } from '@/domain/payloads/RegisterPayload'
 import { REGISTER_URL } from '@/config'
 import { toast } from 'vue3-toastify'
 
-export default defineComponent({
-  name: 'RegisterForm',
-  components: {
-    InputField,
-    SubmitButton,
-    AuthFormWrapper,
-    AuthViewsLink
+const { values, errors, handleChange } = useForm<RegisterPayload['user']>(
+  {
+    username: '',
+    email: '',
+    password: ''
   },
-  setup() {
-    const { values, errors, handleChange } = useForm<RegisterPayload['user']>(
-      {
-        username: '',
-        email: '',
-        password: ''
-      },
-      (value) => RunValidation(REGISTER_VALIDATION, value)
-    )
-    const { setUser } = useAuth()
-    const router = useRouter()
-    const { mutate, data, error, loading } = useMutation<User, RegisterPayload>({
-      url: REGISTER_URL,
-      method: 'POST'
-    })
-
-    const handleSubmit = async () => {
-      try {
-        await mutate({
-          user: {
-            ...values.value
-          }
-        })
-        if (data.value === null || error.value !== null) {
-          toast.error(error.value!.message)
-          return
-        }
-        toast.success('welcome')
-        setUser(data.value, true)
-        router.push({ name: 'dashboard' })
-      } catch (err) {
-        console.error('Registration failed:', err)
-      }
-    }
-    return {
-      handleSubmit,
-      values,
-      handleChange,
-      errors,
-      loading
-    }
-  }
+  (value) => RunValidation(REGISTER_VALIDATION, value)
+)
+const { setUser } = useAuth()
+const router = useRouter()
+const { mutate, data, error, loading } = useMutation<User, RegisterPayload>({
+  url: REGISTER_URL,
+  method: 'POST'
 })
+
+const handleSubmit = async () => {
+  try {
+    await mutate({
+      user: {
+        ...values.value
+      }
+    })
+    if (data.value === null || error.value !== null) {
+      toast.error(error.value!.message)
+      return
+    }
+    toast.success('welcome')
+    setUser(data.value, true)
+    router.push({ name: 'dashboard' })
+  } catch (err) {
+    console.error('Registration failed:', err)
+  }
+}
 </script>
 
-<style scoped>
-.title {
-  padding: 37px 0;
-}
-</style>

@@ -1,5 +1,5 @@
-import type { Errors } from './useForm'
 import Joi from 'joi'
+import type { Errors } from './contracts/Form'
 
 export function convertJoiErrors<T>(joiErrors: Joi.ValidationResult<T>): Errors<T> {
   const errors: Errors<T> = {}

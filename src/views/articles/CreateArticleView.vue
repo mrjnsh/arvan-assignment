@@ -44,8 +44,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue'
 import SubmitButton from '@/components/form/button/SubmitButton.vue'
 import InputField from '@/components/form/input/InputField.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
@@ -64,71 +64,49 @@ import TagsList from '@/components/dashboard/tags/TagsList.vue'
 import type { TagsPayload } from '@/domain/payloads/articles/TagsPayload'
 import { toast } from 'vue3-toastify'
 
-export default defineComponent({
-  name: 'NewArticleForm',
-  components: {
-    InputField,
-    SubmitButton,
-    TagsList,
-    ListTitle,
-    TextareaField
+const router = useRouter()
+const tags = ref<TagsPayload>({ tags: [] })
+
+const updateSelectedTags = (newTags: string[]) => {
+  tags.value = { tags: newTags }
+}
+
+const { values, errors, handleChange } = useForm<Omit<CreateArticlePayload['article'], 'tagList'>>(
+  {
+    title: '',
+    description: '',
+    body: ''
   },
-  setup() {
-    const router = useRouter()
-    const tags = ref<TagsPayload>({ tags: [] })
+  (value) => RunValidation(ARTICLE_VALIDATION, value)
+)
 
-    const updateSelectedTags = (newTags: string[]) => {
-      tags.value = { tags: newTags }
-    }
-
-    const { values, errors, handleChange } = useForm<
-      Omit<CreateArticlePayload['article'], 'tagList'>
-    >(
-      {
-        title: '',
-        description: '',
-        body: ''
-      },
-      (value) => RunValidation(ARTICLE_VALIDATION, value)
-    )
-
-    const { mutate, data, error, loading } = useMutation<Article, CreateArticlePayload>({
-      url: ARTICLES_URL,
-      method: 'POST',
-      includeAuth: true
-    })
-
-    const handleSubmit = async () => {
-      try {
-        await mutate({
-          article: {
-            ...values.value,
-            tagList: tags.value.tags
-          }
-        })
-        toast.success('Article added successfully')
-        if (data.value === null || error.value !== null) {
-          toast.error(error.value!.message)
-          return
-        }
-        router.push({ name: 'articles' })
-        tags.value = { tags: [] }
-      } catch (error) {
-        console.error('Error creating article:', error)
-      }
-    }
-    return {
-      tags,
-      handleSubmit,
-      values,
-      handleChange,
-      updateSelectedTags,
-      errors,
-      loading
-    }
-  }
+const { mutate, data, error, loading } = useMutation<Article, CreateArticlePayload>({
+  url: ARTICLES_URL,
+  method: 'POST',
+  includeAuth: true
 })
+
+const handleSubmit = async () => {
+  try {
+    await mutate({
+      article: {
+        ...values.value,
+        tagList: tags.value.tags
+      }
+    })
+    toast.success('Article added successfully')
+    if (data.value === null || error.value !== null) {
+      toast.error(error.value!.message)
+      return
+    }
+    router.push({ name: 'articles' })
+    tags.value = { tags: [] }
+  } catch (error) {
+    console.error('Error creating article:', error)
+  }
+}
 </script>
+
 
 <style scoped>
 .tag-container {

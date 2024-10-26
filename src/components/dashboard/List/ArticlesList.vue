@@ -34,45 +34,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+<script lang="ts" setup>
 import DropdownMenu from '../dropdown/DropdownMenu.vue'
 import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: 'ArticlesList',
-  components: {
-    DropdownMenu
-  },
-  props: {
-    paginatedArticles: {
-      type: Array as PropType<Array<any>>,
-      required: true
-    },
-    currentPage: {
-      type: Number,
-      required: true
-    },
-    itemsPerPage: {
-      type: Number,
-      required: true
-    }
-  },
-  emits: ['article-deleted'],
-  setup(props, { emit }) {
-    const router = useRouter()
-    const deleteArticle = (slug: string) => {
-      emit('article-deleted', slug)
-    }
-    const editArticle = (slug: string) => {
-      router.push({ name: 'article-edited', params: { slug } })
-    }
-    return {
-      deleteArticle,
-      editArticle
-    }
-  }
-})
+defineProps<{
+  paginatedArticles: Array<any>
+  currentPage: number
+  itemsPerPage: number
+}>()
+
+const emit = defineEmits(['article-deleted'])
+const router = useRouter()
+const deleteArticle = (slug: string) => {
+  emit('article-deleted', slug)
+}
+const editArticle = (slug: string) => {
+  router.push({ name: 'article-edited', params: { slug } })
+}
 </script>
 
 <style scoped>

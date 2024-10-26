@@ -6,12 +6,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'WrapperComponent'
-}
-</script>
-
 <style>
 .form-container {
   background-color: var(--silver-color);

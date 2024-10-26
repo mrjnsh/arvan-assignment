@@ -1,13 +1,5 @@
 import { reactive, toRefs, ref, shallowRef, type Ref } from 'vue'
-
-type FieldValues = Record<string, string | boolean | number | undefined | null>
-export type Errors<T> = { [key in keyof T]?: string[] }
-interface FormState {
-  isSubmitting: boolean
-  isValid: boolean
-}
-
-type Validator<T> = (value: T) => Errors<T> | null
+import type { Errors, FieldValues, FormState, Validator } from './contracts/Form'
 
 export function useForm<T extends FieldValues = FieldValues>(
   initialValues: T,

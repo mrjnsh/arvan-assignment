@@ -7,25 +7,12 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  props: {
-    questionText: {
-      type: String,
-      required: false
-    },
-    questionLink: {
-      type: String,
-      required: false
-    },
-    questionLinkText: {
-      type: String,
-      required: false
-    }
-  }
-})
+<script lang="ts" setup>
+defineProps<{
+  questionText?: string
+  questionLink?: string
+  questionLinkText?: string
+}>()
 </script>
 
 <style>

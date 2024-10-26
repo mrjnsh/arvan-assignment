@@ -27,17 +27,9 @@
   </header>
 </template>
 
-<script lang="ts">
+<script setup>
 import './NavigationStyle.css'
 import { useAuth } from '@/modules/useAuth'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const { user } = useAuth()
-    return {
-      user
-    }
-  }
-})
+const { user } = useAuth()
 </script>

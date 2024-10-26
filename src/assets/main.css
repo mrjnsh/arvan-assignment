@@ -20,6 +20,7 @@ h6 {
   font-stretch: normal;
   font-style: normal;
   line-height: 1.19;
+  padding: 37px 0;
   letter-spacing: normal;
   color: var(--light-gray-color);
 }
