@@ -33,27 +33,18 @@
   </nav>
 </template>
 
-<script lang="ts">
+<script setup>
 import './SidebarStyle.css'
 import { useAuth } from '@/modules/useAuth'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const { user } = useAuth()
+const { user } = useAuth()
 
-    const closeSidebar = () => {
-      const sidebar = document.getElementById('sidebarMenu')
-      if (sidebar && sidebar.classList.contains('show')) {
-        sidebar.classList.remove('show')
-      }
-    }
-    return {
-      user,
-      closeSidebar
-    }
+const closeSidebar = () => {
+  const sidebar = document.getElementById('sidebarMenu')//emit
+  if (sidebar && sidebar.classList.contains('show')) {
+    sidebar.classList.remove('show')
   }
-})
+}
 </script>
 
 <style>

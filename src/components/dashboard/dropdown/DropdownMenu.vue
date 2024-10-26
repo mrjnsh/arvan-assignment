@@ -30,60 +30,40 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ARTICLES_URL } from '@/config'
 import type { Article } from '@/domain/Article'
 import { useMutation } from '@/hooks/useMutation'
 import { makeHtmlIdCompatible } from '@/utility/stringUtils'
-import { defineComponent } from 'vue'
 import { toast } from 'vue3-toastify'
 import DeleteModal from '../modal/DeleteModal.vue'
 
-export default defineComponent({
-  name: 'DropdownMenu',
-  components: {
-    DeleteModal
-  },
-  props: {
-    slug: {
-      type: String,
-      required: true
-    }
-  },
-  emits: ['article-deleted', 'article-edited'],
-  setup(props, { emit }) {
-    const { mutate, loading, error } = useMutation<Article, {}>({
-      url: `${ARTICLES_URL}/${props.slug}`,
-      method: 'DELETE',
-      includeAuth: true
-    })
+const props = defineProps<{ slug: string }>()
+const emit = defineEmits(['article-deleted', 'article-edited'])
 
-    const deleteArticle = async () => {
-      try {
-        await mutate({})
-        if (error.value) {
-          toast.error(error.value.message)
-        } else {
-          toast.success('Article deleted successfully')
-        }
-        emit('article-deleted', props.slug)
-      } catch (error) {
-        console.error('Failed to delete the article:', error)
-      }
-    }
-
-    const editArticle = () => {
-      emit('article-edited', props.slug)
-    }
-
-    return {
-      deleteArticle,
-      editArticle,
-      makeHtmlIdCompatible,
-      loading
-    }
-  }
+const { mutate, error } = useMutation<Article, {}>({
+  url: `${ARTICLES_URL}/${props.slug}`,
+  method: 'DELETE',
+  includeAuth: true
 })
+
+const deleteArticle = async () => {
+  try {
+    await mutate({})
+    if (error.value) {
+      toast.error(error.value.message)
+    } else {
+      toast.success('Article deleted successfully')
+    }
+    emit('article-deleted', props.slug)
+  } catch (error) {
+    console.error('Failed to delete the article:', error)
+  }
+}
+
+const editArticle = () => {
+  emit('article-edited', props.slug)
+}
 </script>
 
 <style scoped>

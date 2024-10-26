@@ -4,15 +4,6 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  props: {
-    buttonText: {
-      type: String,
-      required: true
-    }
-  }
-})
+<script lang="ts" setup>
+defineProps<{ buttonText: string }>()
 </script>

@@ -1,12 +1,3 @@
-<script setup>
-import { useAuth } from '@/modules/useAuth'
-import NavbarTemplate from '../navbar/NavbarTemplate.vue'
-import SidebarTemplate from '../sidebar/SidebarTemplate.vue'
-import LoadingTemplate from '@/components/loading/LoadingIndicator.vue'
-
-const { authenticating } = useAuth()
-</script>
-
 <template>
   <div>
     <NavbarTemplate />
@@ -21,3 +12,12 @@ const { authenticating } = useAuth()
     </div>
   </div>
 </template>
+
+<script setup>
+import { useAuth } from '@/modules/useAuth'
+import NavbarTemplate from '../navbar/NavbarTemplate.vue'
+import SidebarTemplate from '../sidebar/SidebarTemplate.vue'
+import LoadingTemplate from '@/components/loading/LoadingIndicator.vue'
+
+const { authenticating } = useAuth()
+</script>

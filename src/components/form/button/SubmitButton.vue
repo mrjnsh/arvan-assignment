@@ -4,19 +4,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    buttonText: {
-      type: String,
-      required: true
-    }
-  }
+<script lang="ts" setup>
+withDefaults(defineProps<{ disabled: boolean; buttonText: string }>(), {
+  disabled: false
 })
 </script>

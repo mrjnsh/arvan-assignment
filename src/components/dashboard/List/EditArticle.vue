@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import SubmitButton from '@/components/form/button/SubmitButton.vue'
 import InputField from '@/components/form/input/InputField.vue'
 import TextareaField from '@/components/form/textarea/TextareaField.vue'
@@ -58,80 +58,51 @@ import type { TagsPayload } from '@/domain/payloads/articles/TagsPayload'
 import { RunValidation } from '@/hooks/joiValidator'
 import { useForm } from '@/hooks/useForm'
 import { useMutation } from '@/hooks/useMutation'
-import { defineComponent, ref, type PropType } from 'vue'
+import { defineProps, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 
-export default defineComponent({
-  name: 'EditArticleForm',
-  props: {
-    articleData: {
-      type: Object as PropType<ArticleItem['article']>,
-      required: true
-    }
+const props = defineProps<{ articleData: ArticleItem['article'] }>()
+const tags = ref<TagsPayload>({ tags: props.articleData.tagList })
+const router = useRouter()
+const updateSelectedTags = (newTags: string[]) => {
+  tags.value = { tags: newTags }
+}
+
+const { values, errors, handleChange } = useForm<Omit<EditArticlePayload['article'], 'tagList'>>(
+  {
+    slug: props.articleData?.slug ?? '',
+    title: props.articleData?.title ?? '',
+    description: props.articleData?.description ?? '',
+    body: props.articleData?.body ?? ''
   },
-  components: {
-    InputField,
-    SubmitButton,
-    TagsList,
-    ListTitle,
-    TextareaField
-  },
-  setup(props) {
-    const tags = ref<TagsPayload>({ tags: props.articleData.tagList })
-    const router = useRouter()
-    const updateSelectedTags = (newTags: string[]) => {
-      tags.value = { tags: newTags }
-    }
+  (value) => RunValidation(ARTICLE_VALIDATION, value)
+)
 
-    const { values, errors, handleChange } = useForm<
-      Omit<EditArticlePayload['article'], 'tagList'>
-    >(
-      {
-        slug: props.articleData?.slug ?? '',
-        title: props.articleData?.title ?? '',
-        description: props.articleData?.description ?? '',
-        body: props.articleData?.body ?? ''
-      },
-      (value) => RunValidation(ARTICLE_VALIDATION, value)
-    )
-
-    const { mutate, data, error, loading } = useMutation<Article, EditArticlePayload>({
-      url: `${ARTICLES_URL}/${props.articleData.slug}`,
-      method: 'PUT',
-      includeAuth: true
-    })
-
-    const handleSubmit = async () => {
-      try {
-        await mutate({
-          article: {
-            ...values.value,
-            tagList: tags.value.tags
-          }
-        })
-        if (data.value === null || error.value !== null) {
-          toast.error(error.value!.message)
-          return
-        } else {
-          toast.success('Article updated successfully')
-        }
-        router.push({ name: 'articles' })
-        tags.value = { tags: [] }
-      } catch (error) {
-        console.error('Error updating article:', error)
-      }
-    }
-
-    return {
-      tags,
-      handleSubmit,
-      values,
-      handleChange,
-      updateSelectedTags,
-      errors,
-      loading
-    }
-  }
+const { mutate, data, error, loading } = useMutation<Article, EditArticlePayload>({
+  url: `${ARTICLES_URL}/${props.articleData.slug}`,
+  method: 'PUT',
+  includeAuth: true
 })
+
+const handleSubmit = async () => {
+  try {
+    await mutate({
+      article: {
+        ...values.value,
+        tagList: tags.value.tags
+      }
+    })
+    if (data.value === null || error.value !== null) {
+      toast.error(error.value!.message)
+      return
+    } else {
+      toast.success('Article updated successfully')
+    }
+    router.push({ name: 'articles' })
+    tags.value = { tags: [] }
+  } catch (error) {
+    console.error('Error updating article:', error)
+  }
+}
 </script>
