@@ -9,9 +9,9 @@
 
 <script lang="ts" setup>
 defineProps<{
-  questionText?: string
-  questionLink?: string
-  questionLinkText?: string
+  questionText: string
+  questionLink: string
+  questionLinkText: string
 }>()
 </script>
 

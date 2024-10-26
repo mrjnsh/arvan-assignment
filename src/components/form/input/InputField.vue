@@ -24,7 +24,7 @@ const props = withDefaults(
   defineProps<{
     modelValue: string
     label: string
-    errorText: string
+    errorText?: string
     inputId: string
     typeOfInput: string
     required: boolean
