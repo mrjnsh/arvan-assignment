@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import type { FetchOptions } from './contracts/FetchOptions'
 import { useAuth } from '@/modules/useAuth'
 
-export function useQuery<T, P extends Record<string, string>>({
+export function useQuery<T, P extends Record<string, string | number | boolean>>({
   url,
   method,
   headers,
@@ -21,7 +21,16 @@ export function useQuery<T, P extends Record<string, string>>({
       throw new Error('User is not Logged in.')
     }
     try {
-      const queryString = new URLSearchParams(params).toString()
+      const queryString = params
+        ? new URLSearchParams(
+            Object.fromEntries(
+              Object.entries(params).map(([key, value]) => {
+                return [key, value.toString()]
+              })
+            )
+          ).toString()
+        : ''
+
       const response = await callAPI([url, queryString].filter(Boolean).join('?'), {
         method,
         headers: {

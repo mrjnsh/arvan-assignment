@@ -81,7 +81,7 @@ const handleSubmit = async () => {
     }
     toast.success('welcome')
     setUser(data.value, true)
-    router.push({ name: 'dashboard' })
+    router.push({ name: 'articles' })
   } catch (err) {
     console.error('Login failed:', err)
   }

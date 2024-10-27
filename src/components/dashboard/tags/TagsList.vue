@@ -5,7 +5,7 @@
       typeOfInput="text"
       label="New Tag"
       inputId="newTag"
-      @keypress.enter="addTag"
+      @keypress.enter.prevent="addTag"
     />
   </div>
   <div class="d-flex">
@@ -24,71 +24,50 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import InputField from '@/components/form/input/InputField.vue'
 import { TAGS_LIST_URL } from '@/config'
 import type { Tags } from '@/domain/Article'
 import { useQuery } from '@/hooks/useQuery'
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
-export default defineComponent({
-  name: 'TagsList',
-  components: {
-    InputField
-  },
-  props: {
-    selectedTags: {
-      type: Array as () => string[],
-      required: true
-    }
-  },
-  setup(props, { emit }) {
-    const newTag = ref('')
-    const userTags = ref<string[]>([])
-    const internalSelectedTags = ref<string[]>(props.selectedTags)
+const props = defineProps<{ selectedTags: string[] }>()
 
-    const { data, fetchData } = useQuery<Tags, {}>({
-      url: TAGS_LIST_URL,
-      method: 'GET'
-    })
+const newTag = ref('')
+const userTags = ref<string[]>([])
+const internalSelectedTags = ref<string[]>(props.selectedTags)
 
-    watch(internalSelectedTags, (newVal) => {
-      emit('update:selectedTags', newVal)
-    })
-    onMounted(() => {
-      fetchData()
-        .then(() => {
-          if (data.value) {
-            userTags.value.push(...data.value.tags)
-          }
-        })
-        .catch((err) => {
-          console.error('Failed to fetch tags:', err)
-        })
-    })
-    const addTag = () => {
-      const tag = newTag.value.trim()
-      if (tag && !userTags.value.includes(tag)) {
-        userTags.value.push(tag)
-        userTags.value.sort((a, b) => a.localeCompare(b))
-        internalSelectedTags.value = [...internalSelectedTags.value, tag]
-        newTag.value = ''
+const { data, fetchData } = useQuery<Tags, {}>({
+  url: TAGS_LIST_URL,
+  method: 'GET'
+})
+const emit = defineEmits(['update:selectedTags'])
+watch(internalSelectedTags, (newVal) => {
+  emit('update:selectedTags', newVal)
+})
+onMounted(() => {
+  fetchData()
+    .then(() => {
+      if (data.value) {
+        userTags.value.push(...data.value.tags)
       }
-    }
-    const combinedTags = computed(() => {
-      const tagsSet = new Set([...userTags.value, ...props.selectedTags])
-      return Array.from(tagsSet).sort((a, b) => a.localeCompare(b))
     })
-
-    return {
-      newTag,
-      userTags,
-      internalSelectedTags,
-      addTag,
-      combinedTags,
-      data
-    }
+    .catch((err) => {
+      console.error('Failed to fetch tags:', err)
+    })
+})
+const addTag = () => {
+  const tag = newTag.value.trim()
+  if (tag && !userTags.value.includes(tag)) {
+    userTags.value.push(tag)
+    userTags.value.sort((a, b) => a.localeCompare(b))
+    internalSelectedTags.value = [...internalSelectedTags.value, tag]
+    newTag.value = ''
   }
+}
+const combinedTags = computed(() => {
+  const tagsSet = new Set([...userTags.value, ...props.selectedTags])
+  return Array.from(tagsSet).sort((a, b) => a.localeCompare(b))
 })
 </script>
 

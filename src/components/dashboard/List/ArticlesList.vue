@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import DropdownMenu from '../dropdown/DropdownMenu.vue'
 import { useRouter } from 'vue-router'
-import type { ListArticle } from '@/domain/payloads/articles/ListsArticle';
+import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
 
 defineProps<{
   articles?: ListArticle['articles']
@@ -63,5 +63,8 @@ td {
 }
 .custom-header th {
   color: var(--dark-gray-color);
+}
+.table-responsive {
+  margin: 0 0 3rem 0;
 }
 </style>

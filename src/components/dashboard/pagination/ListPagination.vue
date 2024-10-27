@@ -36,25 +36,18 @@
 </template>
 
 <script lang="ts" setup>
-
-const props = defineProps<{currentPage:number,totalPages:number}>()
+const props = defineProps<{ currentPage: number; totalPages: number }>()
 const emit = defineEmits(['page-change'])
 
-    const goToPage = (page: number) => {
-      if (page >= 1 && page <= props.totalPages) {
-        emit('page-change', page)
-      }
-    }
-
-
+const goToPage = (page: number) => {
+  if (page >= 1 && page <= props.totalPages) {
+    emit('page-change', page)
+  }
+}
 </script>
 
 <style scoped>
-.pagination {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-}
+
 
 .page-item.disabled .page-link {
   cursor: not-allowed;

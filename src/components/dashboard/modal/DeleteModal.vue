@@ -16,22 +16,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+const props = defineProps<{ handleDelete: Function }>()
 
-export default defineComponent({
-  name: 'DeletionModal',
-  props: {
-    handleDelete: {
-      type: Function,
-      required: true
-    }
-  },
-  setup(props) {
-    const confirmDelete = () => {
-      props.handleDelete()
-    }
-    return { confirmDelete }
-  }
-})
+const confirmDelete = () => {
+  props.handleDelete()
+}
 </script>
