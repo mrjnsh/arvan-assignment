@@ -6,4 +6,5 @@ interface Item extends Omit<Article, 'tagList'> {
 
 export interface ListArticle {
   articles: Item[]
+  articlesCount:number
 }

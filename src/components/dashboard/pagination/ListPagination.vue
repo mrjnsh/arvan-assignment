@@ -35,34 +35,18 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 
-export default defineComponent({
-  name: 'PaginationTemplate',
-  props: {
-    currentPage: {
-      type: Number,
-      required: true
-    },
-    totalPages: {
-      type: Number,
-      required: true
-    }
-  },
-  emits: ['page-change'],
-  setup(props, { emit }) {
+const props = defineProps<{currentPage:number,totalPages:number}>()
+const emit = defineEmits(['page-change'])
+
     const goToPage = (page: number) => {
-      if (page > 0 && page <= props.totalPages) {
+      if (page >= 1 && page <= props.totalPages) {
         emit('page-change', page)
       }
     }
 
-    return {
-      goToPage
-    }
-  }
-})
+
 </script>
 
 <style scoped>
