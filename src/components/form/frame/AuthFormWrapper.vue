@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-center align-items-center min-vh-100">
-    <div class="form-container">
+    <div class="form-container w-100">
       <slot></slot>
     </div>
   </div>
