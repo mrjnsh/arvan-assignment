@@ -13,8 +13,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(article, index) in paginatedArticles" :key="article.slug" class="text-center">
-          <th scope="row">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
+        <tr v-for="(article, index) in articles" :key="article.slug" class="text-center">
+          <th scope="row">{{ (currentPage - 1) * 6 + index + 1 }}</th>
           <td>{{ article.title || '-' }}</td>
           <td>{{ article.author.username || '-' }}</td>
           <td class="tags">{{ article.tagList?.join(',') || '-' }}</td>
@@ -37,11 +37,11 @@
 <script lang="ts" setup>
 import DropdownMenu from '../dropdown/DropdownMenu.vue'
 import { useRouter } from 'vue-router'
+import type { ListArticle } from '@/domain/payloads/articles/ListsArticle';
 
 defineProps<{
-  paginatedArticles: Array<any>
+  articles?: ListArticle['articles']
   currentPage: number
-  itemsPerPage: number
 }>()
 
 const emit = defineEmits(['article-deleted'])
