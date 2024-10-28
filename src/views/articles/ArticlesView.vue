@@ -29,7 +29,7 @@ import PaginationTemplate from '@/components/dashboard/pagination/ListPagination
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
 import { offsetUtils } from '@/utility/offsetUtils'
 
-const { data: articles, fetchData } = useQuery<ListArticle, { offset: string; limit: number }>({
+const { data: articles, fetchData } = useQuery<ListArticle, { offset: number; limit: number }>({
   url: ARTICLES_URL,
   method: 'GET',
   includeAuth: true
@@ -47,15 +47,15 @@ const goToPage = (page: number) => {
 }
 
 watch(currentPage, (newCurrentPage) => {
-  fetchData({ offset: offsetUtils(newCurrentPage).toString(), limit: ARTICLES_LIMIT })
+  fetchData({ offset: offsetUtils(newCurrentPage), limit: ARTICLES_LIMIT })
 })
 
 const deleteArticle = () => {
-  fetchData({ offset: offsetUtils(currentPage.value).toString(), limit: ARTICLES_LIMIT })
+  fetchData({ offset: offsetUtils(currentPage.value), limit: ARTICLES_LIMIT })
 }
 
 onMounted(async () => {
-  await fetchData({ offset: offsetUtils(currentPage.value).toString(), limit: ARTICLES_LIMIT })
+  await fetchData({ offset: offsetUtils(currentPage.value), limit: ARTICLES_LIMIT })
 })
 </script>
 
