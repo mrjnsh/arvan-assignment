@@ -94,11 +94,11 @@ const handleSubmit = async () => {
         tagList: tags.value.tags
       }
     })
-    toast.success('Article added successfully')
     if (data.value === null || error.value !== null) {
       toast.error(error.value!.message)
       return
     }
+    toast.success('Article added successfully')
     router.push({ name: 'articles' })
     tags.value = { tags: [] }
   } catch (error) {

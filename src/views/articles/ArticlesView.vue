@@ -1,17 +1,19 @@
 <template>
   <div>
     <ListTitle title="All Posts" />
-    <ArticlesList
-      :articles="articles?.articles"
-      :currentPage="currentPage"
-      @article-deleted="deleteArticle"
-    />
-    <div class="d-flex justify-content-center">
-      <PaginationTemplate
+    <div class="container">
+      <ArticlesList
+        :articles="articles?.articles"
         :currentPage="currentPage"
-        :totalPages="totalPages"
-        @page-change="goToPage"
+        @article-deleted="deleteArticle"
       />
+      <div class="d-flex justify-content-center" v-if="articles?.articlesCount !== 0">
+        <PaginationTemplate
+          :currentPage="currentPage"
+          :totalPages="totalPages"
+          @page-change="goToPage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +27,9 @@ import type { ListArticle } from '@/domain/payloads/articles/ListsArticle'
 import ArticlesList from '@/components/dashboard/List/ArticlesList.vue'
 import PaginationTemplate from '@/components/dashboard/pagination/ListPagination.vue'
 import ListTitle from '@/components/dashboard/hearder/ListTitle.vue'
+import { offsetUtils } from '@/utility/offsetUtils'
 
-const { data: articles, fetchData } = useQuery<ListArticle, { offset: string; limit: string }>({
+const { data: articles, fetchData } = useQuery<ListArticle, { offset: number; limit: number }>({
   url: ARTICLES_URL,
   method: 'GET',
   includeAuth: true
@@ -35,9 +38,7 @@ const { data: articles, fetchData } = useQuery<ListArticle, { offset: string; li
 const route = useRoute()
 const router = useRouter()
 const currentPage = computed(() => parseInt(route.params.page as string, 10) || 1)
-const totalPages = computed(() =>
-  Math.ceil((articles.value?.articlesCount ?? 0) / parseInt(ARTICLES_LIMIT, 10))
-)
+const totalPages = computed(() => Math.ceil((articles.value?.articlesCount ?? 0) / ARTICLES_LIMIT))
 
 const goToPage = (page: number) => {
   if (page > 0 && page <= totalPages.value) {
@@ -46,15 +47,15 @@ const goToPage = (page: number) => {
 }
 
 watch(currentPage, (newCurrentPage) => {
-  fetchData({ offset: newCurrentPage.toString(), limit: ARTICLES_LIMIT })
+  fetchData({ offset: offsetUtils(newCurrentPage), limit: ARTICLES_LIMIT })
 })
 
 const deleteArticle = () => {
-  fetchData({ offset: currentPage.value.toString(), limit: ARTICLES_LIMIT })
+  fetchData({ offset: offsetUtils(currentPage.value), limit: ARTICLES_LIMIT })
 }
 
 onMounted(async () => {
-  await fetchData({ offset: currentPage.value.toString(), limit: ARTICLES_LIMIT })
+  await fetchData({ offset: offsetUtils(currentPage.value), limit: ARTICLES_LIMIT })
 })
 </script>
 
@@ -64,5 +65,11 @@ td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  justify-content: space-between;
 }
 </style>
